@@ -2,7 +2,10 @@
 from flask import Flask
 from flask import json
 from flask import request
+<<<<<<< HEAD
 from flask import jsonify
+=======
+>>>>>>> 68cae05df7972285a4640eda6569e34f63a47a3f
 from flask_cors import CORS, cross_origin
 from flask_restful import Api, Resource, reqparse, fields, marshal_with
 import sqlite3
@@ -11,7 +14,10 @@ import time
 from datetime import date
 import string
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 68cae05df7972285a4640eda6569e34f63a47a3f
 app = Flask(__name__)
 CORS(app)
 cors = CORS(app, resources={
@@ -145,6 +151,7 @@ class Suggestions(Resource): #Resource expose supported methods and if request h
         
 
         if duplicate:
+<<<<<<< HEAD
             return jsonify(
                 status = 'You already suggested this one!'
             )
@@ -153,14 +160,23 @@ class Suggestions(Resource): #Resource expose supported methods and if request h
             return jsonify(
                 status = 'Decision for this lunch was already made!'
             )
+=======
+            return 'Sorry, you already suggested this one :)'
+        elif check_for_decision(id):
+            return 'Sorry decision for this lunch was already made. You can always start a new session and vote again!'
+>>>>>>> 68cae05df7972285a4640eda6569e34f63a47a3f
 
         else:
             add_suggestion(name,suggestion,id)
             remove_id_data(table_name='decisions', id=id)
+<<<<<<< HEAD
             return jsonify(
                 status = 'Thanks! Suggestion added.'
             )            
             
+=======
+            return 'Thanks!', 201
+>>>>>>> 68cae05df7972285a4640eda6569e34f63a47a3f
 
 #Define resources and supported methods
 class WSWE(Resource): 
@@ -177,6 +193,7 @@ class WSWE(Resource):
         c = conn.cursor()
         c.execute(f"SELECT *  FROM decisions WHERE id='{id}'")
         existing_decision = c.fetchall()
+<<<<<<< HEAD
        
         if existing_decision:
             print('existing: ' f'{existing_decision}')
@@ -199,14 +216,41 @@ class WSWE(Resource):
                     decision = decision,
                     name = name
                 )
+=======
+        if existing_decision:
+
+            print('existing: ' f'{existing_decision}')
+            #decision = existing_decision[0][1]
+            #print(decision)
+            decision = existing_decision[0][1]
+            name = existing_decision[0][0]
+            response = f"You should eat: {decision} <br>It was suggested by: {name}"
+            remove_id_data(table_name='suggestions', id=id)
+            
+            #response = make_decision(id)
+
+        else:
+            print('no decision for this id yet')
+            response = make_decision(id)
+            print('This is the decision')
+            print(response)
+            
+            if response == None:
+                response = 'Sorry we there were no suggestions for this id yet'
+>>>>>>> 68cae05df7972285a4640eda6569e34f63a47a3f
             
             else:
                 decision=(response[0]['suggestion'])
                 name = response[0]['name']
+<<<<<<< HEAD
                 response = jsonify(
                     decision = decision,
                     name = name
                 )
+=======
+                response = f"You should eat: {decision} <br> It was suggested by: {name}"
+                print(decision)
+>>>>>>> 68cae05df7972285a4640eda6569e34f63a47a3f
                 add_decision(name,decision,id)
 
                 conn = sqlite3.connect('database.db')
